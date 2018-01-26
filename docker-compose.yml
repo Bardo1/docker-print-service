@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+        print-service:
+                image: jeanfi/print-service
+                build: .
+                privileged: true
+                ports:
+                        - "631:631"

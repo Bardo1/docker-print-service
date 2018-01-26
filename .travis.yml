@@ -1,0 +1,21 @@
+sudo: required
+
+services:
+  - docker
+
+before_install:
+  - docker build -t print-service .
+
+install:
+  - docker run -d print-service
+
+script:
+  - docker ps | grep -q print-service
+
+after_success:
+ - if [[ $TRAVIS_PULL_REQUEST == "false" ]] && [[ $TRAVIS_BRANCH == "master" ]]; then
+    echo "DOCKER_USERNAME=$DOCKER_USERNAME";
+    docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD";
+    docker tag pnews jeanfi/print-service;
+    docker push jeanfi/print-service;
+   fi
